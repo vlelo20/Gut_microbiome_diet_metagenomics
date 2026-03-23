@@ -33,12 +33,41 @@ module load kronatools/2.8.1
 ## **2.2 Data & Metadata**
 
 ### **2.2.1 Data Source**
+Raw shotgun metagenomics sequences were obtained from:
+
+> Fragiadakis, G.K. et al. (2020). Links between environment, diet, and the hunter-gatherer microbiome. *Cell Host & Microbe*, 27(3), 380–391.
+> NCBI SRA Accession: [SRP126540](https://www.ncbi.nlm.nih.gov/sra/?term=SRP126540)
 
 ### **2.2.2 Sample Information**
 
-### **2.2.3 Data Download**
+| SRR Accession | Diet Group | Read Length |
+|---|---|---|
+| SRR8146951 | Vegan | 150 bp |
+| SRR8146952 | Vegan | 150 bp |
+| SRR8146944 | Vegan | 150 bp |
+| SRR8146936 | Omnivore | 150 bp |
+| SRR8146935 | Omnivore | 150 bp |
+| SRR8146938 | Omnivore | 150 bp |
 
+### **2.2.3 Data Download**
+Samples were downloaded on the Narval login node using `fasterq-dump` inside a `tmux` session:
+
+```bash
+tmux new -s downloads
+module load sra-toolkit/3.0.9
+
+for SRR in SRR8146951 SRR8146952 SRR8146944 SRR8146936 SRR8146935 SRR8146938; do
+    fasterq-dump $SRR --split-files --threads 6 --skip-technical
+    gzip ${SRR}*.fastq
+done
+```
 ### **2.2.4 Kraken2 Database**
+The Kraken2 **Standard-8 database** (February 2026) was downloaded and extracted on the login node. This database contains RefSeq bacteria, archaea, viral, plasmid, human, and UniVec_Core sequences capped at 8 GB.
+
+```bash
+wget https://genome-idx.s3.amazonaws.com/kraken/k2_standard_08_GB_20260226.tar.gz
+tar -xzf k2_standard_08_GB_20260226.tar.gz -C kraken_db/
+```
 
 ## **2.3 Quality Control**
 
