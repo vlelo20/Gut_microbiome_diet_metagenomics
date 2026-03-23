@@ -71,15 +71,40 @@ tar -xzf k2_standard_08_GB_20260226.tar.gz -C kraken_db/
 
 ## **2.3 Quality Control**
 
+
 ### **2.3.1 fastp**
 
-### **2.3.2 MultiQC**
+Quality control and adapter trimming were performed using `fastp/0.24.0`. Adapters were auto-detected for paired-end data, polyG tails were trimmed, and reads shorter than 50 bp were discarded. Each sample produced an HTML and JSON report.
+
+```bash
+fastp --in1 data/${SRR}_1.fastq.gz --in2 data/${SRR}_2.fastq.gz \
+      --out1 qc_output/${SRR}_1_clean.fastq.gz \
+      --out2 qc_output/${SRR}_2_clean.fastq.gz \
+      --detect_adapter_for_pe --trim_poly_g --length_required 50 \
+      --thread 8
+```
 
 ## **2.4 Taxonomic Classification**
 
+
+
 ### **2.4.1 Kraken2**
 
+Taxonomic classification was performed using `kraken2/2.1.6` with the Standard-8 database. A confidence threshold of 0.15 was applied to reduce false positives. The database was loaded into RAM (200 GB allocated) for faster processing. Raw `.kraken` output files were deleted after each sample to conserve storage.
+
+```bash
+kraken2 --db $DB --confidence 0.15 --threads 32 \
+        --report kraken_output/${SRR}.report \
+        --paired qc_output/${SRR}_1_clean.fastq.gz qc_output/${SRR}_2_clean.fastq.gz
+```
+
 ### **2.4.2 Bracken**
+Bracken (`bracken/3.0`) re-estimated species-level abundances from Kraken2 reports by redistributing genus-level reads and normalizing for genome size. Read length was set to 150 bp to match confirmed sequencing length. All six `.bracken` output files were combined into a single abundance matrix using `combine_bracken_outputs.py`.
+
+```bash
+bracken -d $DB -i kraken_output/${SRR}.report \
+        -o bracken_output/${SRR}.bracken -r 150 -l S -t 10
+```
 
 ## **2.5 Diversity Analysis**
 
