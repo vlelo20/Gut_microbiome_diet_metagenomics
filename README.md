@@ -175,6 +175,8 @@ The absence of statistically significant differential abundance results (FDR < 0
 ## ** Limitations**
 The primary limitation of this analysis is the small sample size (n=3 per group), which severely restricts the statistical power of both beta diversity tests and differential abundance analysis. Future studies should include at least 10–20 samples per group to achieve adequate power with compositional methods such as ANCOM-BC2. Additionally, the Kraken2 Standard-8 database is a memory-reduced version of the full Standard database, which may reduce sensitivity for rare or poorly represented taxa. Individual confounders including age, geographic origin, antibiotic history, and body mass index were not accounted for in this analysis, which may contribute to the within-group variability observed across all diversity measures.
 
+Overall, these results support the hypothesis that long‑term vegan and omnivore diets are associated with distinct gut microbiome compositions, particularly in SCFA‑producing taxa and bile‑tolerant species, although the small sample size limits formal statistical significance.
+
 ---
 
 # **5.0 References**
