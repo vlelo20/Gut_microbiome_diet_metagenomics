@@ -158,17 +158,24 @@ ANCOM-BC2 differential abundance analysis identified no taxa reaching FDR < 0.05
 <img width="600" height="800" alt="05_rarefaction" src="https://github.com/user-attachments/assets/e721665b-dc83-431c-a9c5-d6ac994cb725" />
 
 **Figure 5.** Rarefaction curves showing cumulative species discovery as a function of sequencing depth for all six samples. Green lines = vegan samples; red lines = omnivore samples.
+
+Rarefaction analysis confirmed that sequencing depth was sufficient across all samples (Figure 5). All six curves reached a clear plateau well before their maximum read depth, indicating that additional sequencing would yield minimal new species discoveries. Omnivore samples (red) generally reached higher species counts at saturation (approximately 115–140 species) compared to vegan samples (green, approximately 70–120 species), consistent with the higher observed species richness noted in the alpha diversity analysis. The sample with the lowest species count (SRR8146944, vegan) plateaued at approximately 70 species, which may reflect genuine biological differences in community diversity rather than insufficient sequencing depth.
+
 ---
 
 # **4.0 Discussion**
+This study identified notable differences in gut microbiome composition between vegan and omnivore individuals, consistent with the established influence of long-term dietary patterns on microbial community structure (Sonnenburg & Bäckhed, 2016). The partial separation observed in the PCoA (Figure 3) suggests that diet is a meaningful driver of beta diversity, though individual-level variation remains substantial — a well-documented feature of the human gut microbiome (Grice & Segre, 2012).
 
-## **4.1 Biological Interpretation**
+The enrichment of *Blautia wexlerae*, *Roseburia* spp., and *Anaerostipes hadrus* in vegan samples is biologically consistent with a high-fibre, plant-based diet. These taxa are obligate anaerobes that ferment dietary fibre to produce short-chain fatty acids (SCFAs), particularly butyrate and acetate, which are critical for colonocyte energy metabolism and have well-established anti-inflammatory effects (Baxter et al., 2019). The higher abundance of *Bifidobacterium* spp. in vegans further supports this interpretation, as bifidobacterial growth is strongly promoted by plant-derived prebiotics such as inulin and fructooligosaccharides (Zmora et al., 2019).
 
-## **4.2 Key Taxa**
+In contrast, the enrichment of *Bilophila wadsworthia* in omnivores is consistent with the known association between animal-fat consumption and this sulfate-reducing bacterium. David et al. (2014) demonstrated that *Bilophila wadsworthia* blooms rapidly in response to animal-based diets and has been linked to intestinal inflammation through hydrogen sulfide production. Similarly, *Alistipes* spp. — enriched in omnivores here — have been associated with protein fermentation and are frequently elevated in individuals consuming high-protein, animal-based diets (Mosca et al., 2016).
 
-## **4.3 Limitations**
+The absence of statistically significant differential abundance results (FDR < 0.05) is most plausibly explained by insufficient statistical power at n=3 per group, rather than a true absence of biological signal. The directional consistency of fold changes with the published literature supports the biological relevance of the observed trends.
+
+## ** Limitations**
+The primary limitation of this analysis is the small sample size (n=3 per group), which severely restricts the statistical power of both beta diversity tests and differential abundance analysis. Future studies should include at least 10–20 samples per group to achieve adequate power with compositional methods such as ANCOM-BC2. Additionally, the Kraken2 Standard-8 database is a memory-reduced version of the full Standard database, which may reduce sensitivity for rare or poorly represented taxa. Individual confounders including age, geographic origin, antibiotic history, and body mass index were not accounted for in this analysis, which may contribute to the within-group variability observed across all diversity measures.
+
 # 5.0 References
-
 ---
 
 # **6.0 References**
