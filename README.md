@@ -136,15 +136,28 @@ Taxonomic classification with Kraken2 and Bracken identified 223 species across 
 ## **3.3 Alpha Diversity**
 <img width="2400" height="1800" alt="02_alpha_diversity" src="https://github.com/user-attachments/assets/bcd171e6-7d4a-4885-b03e-f3198c4741a4" />
 
+**Figure 2.** Alpha diversity measures (Observed species richness, Shannon index, Simpson index) compared between vegan and omnivore diet groups. Points represent individual samples; boxes show interquartile range.
+
+Alpha diversity measures showed overlapping distributions between diet groups, with omnivores tending toward higher median Shannon and Simpson indices than vegans (Figure 2). However, high within-group variability — particularly in the vegan group — means these differences should be interpreted with caution given the small sample size (n=3 per group). Observed species richness was similarly variable, with vegans spanning a wider range than omnivores.
+
 ## **3.4 Beta Diversity**
 <img width="2400" height="1800" alt="03_beta_diversity_PCoA" src="https://github.com/user-attachments/assets/70ed98a4-c547-460a-b575-b80c8e3feea5" />
+
+**Figure 3.** Principal Coordinates Analysis (PCoA) of Bray-Curtis dissimilarity between all six samples, coloured by diet group. PC1 explains 52.1% and PC2 explains 25.4% of total variance.
+
+PCoA of Bray-Curtis dissimilarity revealed partial separation between vegan and omnivore samples along PC1, which accounted for 52.1% of total variance (Figure 3). Two omnivore samples clustered tightly together in the upper right quadrant, while two vegan samples clustered in the upper left. One vegan sample (SRR8146944) was separated from the remaining vegan samples along PC2, suggesting notable inter-individual variability within the vegan group. One omnivore sample (SRR8146935) was also separated from the other omnivores, consistent with the high individual variability documented in human microbiome studies (Grice & Segre, 2012).
 
 ## **3.5 Differential Abundance**
 <img width="3000" height="2400" alt="04_differential_abundance" src="https://github.com/user-attachments/assets/45c6e111-a4af-4dc1-bd09-cd0ef9dd7499" />
 
+**Figure 4.** Top 20 taxa ranked by ANCOM-BC2 p-value, showing log fold change between vegan and omnivore groups. Green bars indicate taxa enriched in vegans; red bars indicate taxa enriched in omnivores. Results are exploratory due to small sample size (n=3 per group).
+
+ANCOM-BC2 differential abundance analysis identified no taxa reaching FDR < 0.05, likely due to the limited statistical power of n=3 samples per group. Exploratory examination of the top 20 taxa ranked by p-value revealed that *Blautia wexlerae*, *Ruminococcus bicirculans*, *Anaerostipes hadrus*, and *Roseburia* spp. showed the largest positive log fold changes in vegans, while *Alistipes onderdonkii*, *Hominenteromicrobium mulieris*, and *Bilophila wadsworthia* showed the largest negative fold changes, indicating enrichment in omnivores (Figure 4).
+
 ## **3.6 Rarefraction Curves**
 <img width="2700" height="1800" alt="05_rarefaction" src="https://github.com/user-attachments/assets/e721665b-dc83-431c-a9c5-d6ac994cb725" />
 
+**Figure 5.** Rarefaction curves showing cumulative species discovery as a function of sequencing depth for all six samples. Green lines = vegan samples; red lines = omnivore samples.
 ---
 
 # **4.0 Discussion**
