@@ -18,7 +18,14 @@ Taxonomic classification was performed using **Kraken2** (Wood et al., 2019), a 
 # **2.0 Methods**
 
 ## **2.1 Environment Setup**
-```
+All analyses were performed on the **Narval HPC cluster** (Digital Alliance of Canada) using SLURM for job scheduling. Downloads were performed directly on the login node inside `tmux` sessions, as compute nodes do not have external internet access.
+
+```bash
+module load sra-toolkit/3.0.9
+module load fastp/0.24.0
+module load kraken2/2.1.6
+module load bracken/3.0
+module load kronatools/2.8.1
 ```
 
 ### **2.1.1 Directory Structure**
