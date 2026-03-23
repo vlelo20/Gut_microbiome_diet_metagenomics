@@ -1,0 +1,80 @@
+name	taxonomy_id	taxonomy_lvl	kraken_assigned_reads	added_reads	new_est_reads	fraction_total_reads
+Segatella copri	165179	S	172685	73851	246536	0.66293
+Bacteroides uniformis	820	S	4448	25412	29860	0.08029
+Bacteroides faecis	674529	S	787	1461	2248	0.00604
+Bacteroides caccae	47678	S	769	528	1297	0.00349
+Bacteroides stercoris	46506	S	440	559	999	0.00269
+Bacteroides ovatus	28116	S	135	2644	2779	0.00747
+Bacteroides xylanisolvens	371601	S	55	587	642	0.00173
+Bacteroides thetaiotaomicron	818	S	54	69	123	0.00033
+Bacteroides fragilis	817	S	42	278	320	0.00086
+Bacteroides sp. D2	556259	S	16	238	254	0.00068
+Bacteroides zhangwenhongii	2650157	S	15	134	149	0.00040
+Phocaeicola vulgatus	821	S	1360	5401	6761	0.01818
+Phocaeicola dorei	357276	S	992	4446	5438	0.01462
+Alistipes putredinis	28117	S	5776	4620	10396	0.02795
+Alistipes finegoldii	214856	S	1078	1644	2722	0.00732
+Alistipes onderdonkii	328813	S	972	800	1772	0.00476
+Alistipes dispar	2585119	S	330	174	504	0.00136
+Alistipes indistinctus	626932	S	264	75	339	0.00091
+Alistipes communis	2585118	S	212	130	342	0.00092
+Alistipes ihumii	1470347	S	162	30	192	0.00052
+Alistipes senegalensis	1288121	S	137	117	254	0.00068
+Alistipes shahii	328814	S	47	145	192	0.00052
+Parabacteroides distasonis	823	S	880	6116	6996	0.01881
+Parabacteroides merdae	46503	S	11	12	23	0.00006
+Odoribacter splanchnicus	28118	S	820	207	1027	0.00276
+Barnesiella intestinihominis	487174	S	299	95	394	0.00106
+Coprobacter secundus	1501392	S	57	25	82	0.00022
+Coprobacter fastidiosus	1099853	S	22	3	25	0.00007
+Haemophilus parainfluenzae	729	S	34	119	153	0.00041
+Sutterella wadsworthensis	40545	S	151	104	255	0.00069
+Sutterella faecalis	2584944	S	126	113	239	0.00064
+Bilophila wadsworthia	35833	S	65	14	79	0.00021
+Desulfovibrio piger	901	S	10	5	15	0.00004
+Faecalibacterium prausnitzii	853	S	598	9611	10209	0.02745
+Faecalibacterium sp. IP-3-29	2929489	S	29	1832	1861	0.00500
+Faecalibacterium sp. I4-3-84	2929495	S	17	836	853	0.00229
+Faecalibacterium sp. PGM34	3567997	S	12	221	233	0.00063
+Faecalibacterium sp. i25-0019-C1	3141185	S	10	1265	1275	0.00343
+Faecalibacterium duncaniae	411483	S	45	2849	2894	0.00778
+Faecalibacterium taiwanense	3030638	S	10	925	935	0.00251
+Ruminococcus bicirculans (ex Wegman et al. 2014)	1160721	S	220	95	315	0.00085
+Ruminococcus callidus	40519	S	40	12	52	0.00014
+Ruminococcus sp. SR1/5	657323	S	11	341	352	0.00095
+Vescimonas coprocola	2714355	S	112	257	369	0.00099
+Pusillibacter faecalis	2714358	S	103	135	238	0.00064
+Flavonifractor plautii	292800	S	93	104	197	0.00053
+Ruthenibacterium lactatiformans	1550024	S	73	55	128	0.00034
+Dysosmobacter welbionis	2093857	S	52	1263	1315	0.00354
+Anaerotruncus colihominis	169435	S	38	52	90	0.00024
+Lawsonibacter asaccharolyticus	2108523	S	20	17	37	0.00010
+Intestinimonas butyriciproducens	1297617	S	31	35	66	0.00018
+Eubacterium ramulus	39490	S	22	42	64	0.00017
+Roseburia faecis	301302	S	2535	2831	5366	0.01443
+Roseburia hominis	301301	S	661	1079	1740	0.00468
+Roseburia intestinalis	166486	S	273	592	865	0.00233
+Simiaoa sunii	2763672	S	1379	1625	3004	0.00808
+Coprococcus sp. ART55/1	751585	S	793	1119	1912	0.00514
+Coprococcus eutactus	33043	S	18	30	48	0.00013
+Blautia wexlerae	418240	S	221	720	941	0.00253
+Blautia obeum	40520	S	71	137	208	0.00056
+Blautia parvula	2877527	S	18	28	46	0.00012
+Blautia luti	89014	S	13	29	42	0.00011
+Agathobacter rectalis	39491	S	284	426	710	0.00191
+Anaerostipes hadrus	649756	S	213	196	409	0.00110
+Dorea longicatena	88431	S	44	148	192	0.00052
+Dorea formicigenerans	39486	S	31	61	92	0.00025
+Anaerobutyricum hallii	39488	S	51	158	209	0.00056
+Mediterraneibacter gnavus	33038	S	49	75	124	0.00033
+[Ruminococcus] torques	33039	S	17	30	47	0.00013
+Jutongia sp. SJQ-6	3445972	S	69	42	111	0.00030
+Lachnospira eligens	39485	S	22	11	33	0.00009
+Wansuia hejianensis	2763667	S	17	6	23	0.00006
+[Clostridium] symbiosum	1512	S	14	5	19	0.00005
+Allocoprococcus comes	410072	S	14	26	40	0.00011
+Phascolarctobacterium succinatutens	626940	S	874	5286	6160	0.01656
+Bifidobacterium longum	216816	S	503	2170	2673	0.00719
+Bifidobacterium adolescentis	1680	S	280	1596	1876	0.00504
+Homo sapiens	9606	S	18	2	20	0.00005
+Brigitvirus brigit	2734096	S	45	4	49	0.00013
