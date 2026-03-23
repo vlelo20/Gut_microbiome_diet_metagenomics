@@ -1,7 +1,7 @@
 # **Gut_microbiome_diet_metagenomics**
 
 Author: Vian Lelo
-Date created: March 20th, 2026, Last Updated: March 20th, 2026
+Date created: March 20th, 2026, Last Updated: March 23rd, 2026
 
 # Shotgun Metagenomics: Vegan vs Omnivore Gut Microbiome Analysis
 
@@ -9,11 +9,6 @@ Date created: March 20th, 2026, Last Updated: March 20th, 2026
 
 # **1.0 Introduction**
 
-## **1.1 Biological Background**
-
-## **1.2 Research Question**
-
-## **1.3 Tool Justification**
 
 ---
 
@@ -78,7 +73,7 @@ Date created: March 20th, 2026, Last Updated: March 20th, 2026
 ## **4.2 Key Taxa**
 
 ## **4.3 Limitations**
-
+# 5.0 References
 
 ---
 
