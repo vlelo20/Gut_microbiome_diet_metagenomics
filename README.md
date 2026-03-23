@@ -175,7 +175,21 @@ The absence of statistically significant differential abundance results (FDR < 0
 ## ** Limitations**
 The primary limitation of this analysis is the small sample size (n=3 per group), which severely restricts the statistical power of both beta diversity tests and differential abundance analysis. Future studies should include at least 10–20 samples per group to achieve adequate power with compositional methods such as ANCOM-BC2. Additionally, the Kraken2 Standard-8 database is a memory-reduced version of the full Standard database, which may reduce sensitivity for rare or poorly represented taxa. Individual confounders including age, geographic origin, antibiotic history, and body mass index were not accounted for in this analysis, which may contribute to the within-group variability observed across all diversity measures.
 
-# 5.0 References
 ---
 
-# **6.0 References**
+# **5.0 References**
+
+- Baxter, N.T. et al. (2019). Dynamics of Human Gut Microbiota and Short-Chain Fatty Acids in Response to Dietary Interventions with Three Fermentable Fibers. *mBio*, 10(1).
+- David, L.A. et al. (2014). Diet rapidly and reproducibly alters the human gut microbiome. *Nature*, 505, 559–563.
+- Durazzi, F. et al. (2021). Comparison between 16S rRNA and shotgun sequencing data for the taxonomic characterization of the gut microbiota. *Scientific Reports*, 11, 3030.
+- Fragiadakis, G.K. et al. (2020). Links between environment, diet, and the hunter-gatherer microbiome. *Cell Host & Microbe*, 27(3), 380–391.
+- Grice, E.A. & Segre, J.A. (2012). The Human Microbiome: Our Second Genome. *Annual Review of Genomics and Human Genetics*, 13, 151–170.
+- Lin, H. & Peddada, S.D. (2020). Analysis of compositions of microbiomes with bias correction. *Nature Communications*, 11, 3514.
+- Love, M.I., Huber, W., Anders, S. (2014). Moderated estimation of fold change and dispersion for RNA-seq data with DESeq2. *Genome Biology*, 15, 550.
+- Lu, J. et al. (2017). Bracken: estimating species abundance in metagenomics data. *PeerJ Computer Science*, 3, e104.
+- McMurdie, P.J. & Holmes, S. (2013). phyloseq: An R package for reproducible interactive analysis and graphics of microbiome census data. *PLoS ONE*, 8(4), e61217.
+- Mosca, A. et al. (2016). Gut Microbiota Diversity and Human Diseases: Should We Reintroduce Key Predators in Our Ecosystem? *Frontiers in Microbiology*, 7, 455.
+- Oksanen, J. et al. (2020). vegan: Community Ecology Package. R package version 2.5-7.
+- Sonnenburg, J.L. & Bäckhed, F. (2016). Diet–microbiota interactions as moderators of human metabolism. *Nature*, 535, 56–64.
+- Wood, D.E., Lu, J., Langmead, B. (2019). Improved metagenomic analysis with Kraken 2. *Genome Biology*, 20, 257.
+- Zmora, N. et al. (2019). Personalized Gut Mucosal Colonization Resistance to Empiric Probiotics Is Associated with Unique Host and Microbiome Features. *Cell*, 174(6), 1388–1405.
