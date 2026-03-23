@@ -85,9 +85,6 @@ fastp --in1 data/${SRR}_1.fastq.gz --in2 data/${SRR}_2.fastq.gz \
 ```
 
 ## **2.4 Taxonomic Classification**
-
-
-
 ### **2.4.1 Kraken2**
 
 Taxonomic classification was performed using `kraken2/2.1.6` with the Standard-8 database. A confidence threshold of 0.15 was applied to reduce false positives. The database was loaded into RAM (200 GB allocated) for faster processing. Raw `.kraken` output files were deleted after each sample to conserve storage.
@@ -105,14 +102,22 @@ Bracken (`bracken/3.0`) re-estimated species-level abundances from Kraken2 repor
 bracken -d $DB -i kraken_output/${SRR}.report \
         -o bracken_output/${SRR}.bracken -r 150 -l S -t 10
 ```
+### **2.4.3 Krona Visualization**
+
+Interactive taxonomic sunburst plots were generated using `kronatools/2.8.1` and `kreport2krona.py` (KrakenTools). All six samples were combined into a single interactive HTML file (`krona_output/all_samples_krona.html`).
 
 ## **2.5 Diversity Analysis**
 
+All diversity analyses were performed in R using `phyloseq`, `vegan`, `ggplot2`, and `ANCOMBC`. The combined Bracken abundance matrix was imported and only read count columns were used (fraction columns excluded).
+
 ### **2.5.1 Alpha Diversity**
+Observed species richness, Shannon index, and Simpson index were calculated using `plot_richness()` in phyloseq and compared between diet groups.
 
 ### **2.5.2 Beta Diversity**
+Bray-Curtis dissimilarity was calculated on relative abundance data and visualized using PCoA ordination (`ordinate()`, method = "PCoA"). A PERMANOVA test (`adonis2`) was performed to assess statistical significance of group separation.
 
 ### **2.5.3 Differential Abundance**
+Differential abundance was assessed using **ANCOM-BC2** (`ANCOMBC` R package), which corrects for compositional bias and unequal sampling fractions. Due to the small sample size (n=3 per group), no taxa reached FDR < 0.05. The top 20 taxa ranked by p-value are presented as exploratory results. Rarefaction curves were generated using `vegan::rarecurve()` to confirm sufficient sequencing depth.
 
 ---
 
