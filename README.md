@@ -124,14 +124,26 @@ Differential abundance was assessed using **ANCOM-BC2** (`ANCOMBC` R package), w
 # **3.0 Results**
 
 ## **3.1 Quality Control Summary**
+All six samples passed quality control with `fastp/0.24.0`. Minimal read loss was observed after trimming across all samples, indicating high raw read quality. Read lengths were confirmed at 150 bp, consistent with the sequencing parameters reported in Fragiadakis et al. (2020). Rarefaction curves for all samples plateaued well before their maximum sequencing depth (Figure 5), confirming that sequencing depth was sufficient to capture the majority of detectable species diversity in each sample.
 
 ## **3.2 Taxonomic Abundance**
+<img width="3600" height="2100" alt="01_taxonomic_abundance" src="https://github.com/user-attachments/assets/f4576c16-52ee-4ffb-966e-aac6662917c0" />
+
+**Figure 1.** Relative abundance of the top 20 most abundant species across vegan and omnivore samples. Each bar represents one sample, with colours indicating species identity.
+
+Taxonomic classification with Kraken2 and Bracken identified 223 species across all six samples. The top 20 most abundant taxa differed visibly between diet groups (Figure 1). Vegan samples showed higher relative abundance of *Blautia wexlerae*, *Bifidobacterium* spp., *Faecalibacterium prausnitzii*, and *Roseburia* spp., while omnivore samples were enriched in *Alistipes* spp., *Phocaeicola vulgatus*, and *Bilophila wadsworthia*. Considerable within-group variability was observed, particularly among vegan samples, with one sample (SRR8146944) showing a distinct composition compared to the other two vegans.
 
 ## **3.3 Alpha Diversity**
+<img width="2400" height="1800" alt="02_alpha_diversity" src="https://github.com/user-attachments/assets/bcd171e6-7d4a-4885-b03e-f3198c4741a4" />
 
 ## **3.4 Beta Diversity**
+<img width="2400" height="1800" alt="03_beta_diversity_PCoA" src="https://github.com/user-attachments/assets/70ed98a4-c547-460a-b575-b80c8e3feea5" />
 
 ## **3.5 Differential Abundance**
+<img width="3000" height="2400" alt="04_differential_abundance" src="https://github.com/user-attachments/assets/45c6e111-a4af-4dc1-bd09-cd0ef9dd7499" />
+
+## **3.6 Rarefraction Curves**
+<img width="2700" height="1800" alt="05_rarefaction" src="https://github.com/user-attachments/assets/e721665b-dc83-431c-a9c5-d6ac994cb725" />
 
 ---
 
