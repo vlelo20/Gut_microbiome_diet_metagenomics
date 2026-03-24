@@ -9,9 +9,13 @@ Date created: March 20th, 2026, Last Updated: March 23rd, 2026
 
 # **1.0 Introduction**
 
-The human gut microbiome is a complex community of microorganisms that plays a critical role in host metabolism, immune function, and overall health. Diet is one of the most influential modulators of gut microbiome composition, with plant-based and animal-based diets shown to differentially shape microbial diversity and species abundance (Sonnenburg & Bäckhed, 2016; David et al., 2014). This project investigates whether dietary pattern (vegan vs. omnivore) significantly influences gut microbiome composition at the species level, using shotgun metagenomics data from Fragiadakis et al. (2020). Unlike 16S metabarcoding, shotgun metagenomics sequences all DNA in a sample, providing higher taxonomic resolution and avoiding amplification bias associated with primer selection (Durazzi et al., 2021).
+Diet is among the most tractable and potent modulators of gut microbiome composition. Unlike host genetics, which account for only 2–8% of microbiome variance in twin studies (Goodrich et al., 2014), diet can remodel microbial community structure within 24–72 hours by exerting direct selective pressure on which taxa can metabolize available substrates — those that can outcompete those that cannot, shifting the ecological balance of the entire community (David et al., 2014). Plant-based diets, rich in fermentable dietary fibre and polyphenols, consistently enrich fibre-degrading taxa such as Faecalibacterium prausnitzii, Roseburia intestinalis, and Bifidobacterium spp. — all associated with anti-inflammatory SCFA production and gut barrier reinforcement (Sonnenburg & Bäckhed, 2016; Dahl et al., 2023). In contrast, animal-based diets high in protein and saturated fat promote bile-tolerant, potentially pro-inflammatory taxa including Bilophila wadsworthia and Bacteroides spp., alongside reductions in SCFA-producing Firmicutes (David et al., 2014; Zinöcker & Lindseth, 2018). Because vegans and omnivores represent a naturally occurring, sustained dietary contrast rather than a controlled short-term intervention, they offer a particularly valuable window into how habitual diet shapes the microbiome over time. This project therefore investigates whether dietary pattern significantly influences gut microbiome composition at the species level, using publicly available shotgun metagenomic data from Fragiadakis et al. (2020), a dataset capturing microbiome variation across individuals with well-characterized, habitual dietary patterns.
 
-Taxonomic classification was performed using **Kraken2** (Wood et al., 2019), a k-mer-based approach that is substantially faster than alignment-based tools such as BLAST or Kaiju while maintaining high sensitivity at an appropriate confidence threshold. A confidence threshold of 0.15 was applied above the default of 0 to reduce false positive classifications — a known limitation of k-mer methods at default settings. **Bracken** (Lu et al., 2017) was used downstream to redistribute genus-level reads to species level and normalize for genome size, providing more accurate species-level abundance estimates than Kraken2 alone. Quality control was performed with **fastp**, which performs adapter trimming and quality filtering in a single efficient pass. Diversity analysis used **phyloseq** and **vegan**, the standard R packages for microbiome community analysis (McMurdie & Holmes, 2013; Oksanen et al., 2020). **ANCOM-BC2** (Lin & Peddada, 2020) was selected for differential abundance over DESeq2 because it is specifically designed for compositional microbiome data and corrects for unequal sampling fractions, making it more appropriate than RNA-seq-derived methods applied to metagenomics. Interactive taxonomic visualizations were generated using **KronaTools** to provide an intuitive overview of community composition across samples.
+The choice of sequencing platform and analytical tools reflects deliberate consideration of their limitations and tradeoffs. Shotgun metagenomics was chosen over 16S rRNA amplicon sequencing because, while 16S metabarcoding is widely used and cost-effective, it targets only the hypervariable V3–V4 regions of the rRNA gene and is subject to amplification biases from primer mismatches, variable gene copy number across taxa, and PCR chimera formation — limiting resolution to the genus level in most cases (Schloss et al., 2011). This is a meaningful constraint when comparing dietary groups in which closely related species, such as Bacteroides thetaiotaomicron and Bacteroides fragilis, can have divergent metabolic roles and health associations. Shotgun metagenomics sequences all DNA in a sample in an untargeted manner, providing species- and strain-level resolution, access to functional gene content, and the ability to detect novel organisms without prior sequence knowledge — though at greater sequencing cost and computational demand, including the need for host read decontamination prior to classification (Quince et al., 2017; Durazzi et al., 2021).
+
+Raw reads were quality-controlled using fastp v0.24.0 (Chen et al., 2018), selected over Trimmomatic for its integrated adapter auto-detection, polyG trimming, and quality filtering in a single pass, with reads below 50 bp discarded. Taxonomic classification was then performed with Kraken2 v2.1.6 (Wood et al., 2019) against the Standard-8 database (February 2026), which includes RefSeq bacterial, archaeal, viral, plasmid, human, and UniVec_Core sequences. While Kraken2 is orders of magnitude faster than alignment-based tools such as BLAST, k-mer methods are prone to false-positive classifications at default settings — particularly for taxa underrepresented in the reference database — which was mitigated by applying a confidence threshold of 0.15 above the default of 0 (Lu & Salzberg, 2020). Bracken v3.0 (Lu et al., 2017) was applied downstream to correct a systematic bias in raw Kraken2 output whereby longer genomes capture disproportionately more reads, inflating their apparent abundance; Bracken redistributes read counts probabilistically and normalizes for genome size, producing more accurate species-level estimates.
+
+Diversity analysis was conducted in R using phyloseq (McMurdie & Holmes, 2013) and vegan (Oksanen et al., 2020). Three complementary alpha diversity metrics were calculated: observed species richness, which counts detected species without weighting; the Shannon index, which accounts for both richness and evenness and is sensitive to community-wide changes; and the Simpson index, which is dominance-weighted and more robust to rare species — together capturing aspects of within-sample diversity that no single metric reflects alone. Beta diversity was assessed using Bray-Curtis dissimilarity on relative abundances, visualized by PCoA, and tested with PERMANOVA (adonis2) to determine whether community composition differed significantly between dietary groups. Rarefaction curves were generated using vegan::rarecurve() to confirm adequate sequencing depth prior to analysis. Differential abundance was assessed using ANCOM-BC2 (Lin & Peddada, 2022), chosen over DESeq2 because microbiome sequencing yields inherently compositional data — a genuine increase in one taxon mathematically suppresses the relative abundance of others, violating the assumptions of DESeq2's negative binomial model, which was designed for RNA-seq (Gloor et al., 2017; Hawinkel et al., 2019). ANCOM-BC2 corrects for this via log-ratio transformations and explicitly accounts for unequal sampling fractions. Given the small sample size (n=3 per group), no taxa reached FDR < 0.05; the top 20 taxa ranked by p-value are therefore presented as exploratory findings. Interactive taxonomic visualizations were generated with KronaTools v2.8.1 (Ondov et al., 2011), providing a hierarchical, sample-level overview of community composition that complements the quantitative analyses.
 
 ---
 
@@ -181,17 +185,48 @@ Overall, these results support the hypothesis that long‑term vegan and omnivor
 
 # **5.0 References**
 
-- Baxter, N.T. et al. (2019). Dynamics of Human Gut Microbiota and Short-Chain Fatty Acids in Response to Dietary Interventions with Three Fermentable Fibers. *mBio*, 10(1).
-- David, L.A. et al. (2014). Diet rapidly and reproducibly alters the human gut microbiome. *Nature*, 505, 559–563.
-- Durazzi, F. et al. (2021). Comparison between 16S rRNA and shotgun sequencing data for the taxonomic characterization of the gut microbiota. *Scientific Reports*, 11, 3030.
-- Fragiadakis, G.K. et al. (2020). Links between environment, diet, and the hunter-gatherer microbiome. *Cell Host & Microbe*, 27(3), 380–391.
-- Grice, E.A. & Segre, J.A. (2012). The Human Microbiome: Our Second Genome. *Annual Review of Genomics and Human Genetics*, 13, 151–170.
-- Lin, H. & Peddada, S.D. (2020). Analysis of compositions of microbiomes with bias correction. *Nature Communications*, 11, 3514.
-- Love, M.I., Huber, W., Anders, S. (2014). Moderated estimation of fold change and dispersion for RNA-seq data with DESeq2. *Genome Biology*, 15, 550.
-- Lu, J. et al. (2017). Bracken: estimating species abundance in metagenomics data. *PeerJ Computer Science*, 3, e104.
-- McMurdie, P.J. & Holmes, S. (2013). phyloseq: An R package for reproducible interactive analysis and graphics of microbiome census data. *PLoS ONE*, 8(4), e61217.
-- Mosca, A. et al. (2016). Gut Microbiota Diversity and Human Diseases: Should We Reintroduce Key Predators in Our Ecosystem? *Frontiers in Microbiology*, 7, 455.
-- Oksanen, J. et al. (2020). vegan: Community Ecology Package. R package version 2.5-7.
-- Sonnenburg, J.L. & Bäckhed, F. (2016). Diet–microbiota interactions as moderators of human metabolism. *Nature*, 535, 56–64.
-- Wood, D.E., Lu, J., Langmead, B. (2019). Improved metagenomic analysis with Kraken 2. *Genome Biology*, 20, 257.
-- Zmora, N. et al. (2019). Personalized Gut Mucosal Colonization Resistance to Empiric Probiotics Is Associated with Unique Host and Microbiome Features. *Cell*, 174(6), 1388–1405.
+Baxter, N. T., Schmidt, A. W., Venkataraman, A., Kim, K. S., Waldron, C., & Schmidt, T. M. (2019). Dynamics of human gut microbiota and short-chain fatty acids in response to dietary interventions with three fermentable fibers. mBio, 10(1), e02566-18.
+
+Cryan, J. F., O’Riordan, K. J., Cowan, C. S. M., Sandhu, K. V., Bastiaanssen, T. F. S., Boehme, M., ... Dinan, T. G. (2019). The microbiota–gut–brain axis. Physiological Reviews, 99(4), 1877–2013.
+
+Dahl, W. J., Rivero Mendoza, D., & Lambert, J. M. (2023). Diet, nutrients and the microbiome. Progress in Molecular Biology and Translational Science, 171, 237–263.
+
+David, L. A., Maurice, C. F., Carmody, R. N., Gootenberg, D. B., Button, J. E., Wolfe, B. E., ... Turnbaugh, P. J. (2014). Diet rapidly and reproducibly alters the human gut microbiome. Nature, 505(7484), 559–563.
+
+Durazzi, F., Sala, C., Castellani, G., Manfreda, G., Remondini, D., & Castellani, G. (2021). Comparison between 16S rRNA and shotgun sequencing data for the taxonomic characterization of the gut microbiota. Scientific Reports, 11, 3030.
+
+Fragiadakis, G. K., Smits, S. A., Sonnenburg, E. D., Van Treuren, W., Reid, G., Knight, R., ... Sonnenburg, J. L. (2020). Links between environment, diet, and the hunter-gatherer microbiome. Cell Host & Microbe, 27(3), 380–391.
+
+Gloor, G. B., Macklaim, J. M., Pawlowsky-Glahn, V., & Egozcue, J. J. (2017). Microbiome datasets are compositional: and this is not optional. Frontiers in Microbiology, 8, 2224.
+
+Goodrich, J. K., Waters, J. L., Poole, A. C., Sutter, J. L., Koren, O., Blekhman, R., ... Ley, R. E. (2014). Human genetics shape the gut microbiome. Cell, 159(4), 789–799.
+
+Grice, E. A., & Segre, J. A. (2012). The human microbiome: Our second genome. Annual Review of Genomics and Human Genetics, 13, 151–170.
+
+Hawinkel, S., Mattiello, F., Bijnens, L., & Thas, O. (2019). A broken promise: Microbiome differential abundance methods do not control the false discovery rate. Briefings in Bioinformatics, 20(1), 210–221.
+
+Lin, H., & Peddada, S. D. (2020). Analysis of compositions of microbiomes with bias correction. Nature Communications, 11, 3514.
+
+Love, M. I., Huber, W., & Anders, S. (2014). Moderated estimation of fold change and dispersion for RNA-seq data with DESeq2. Genome Biology, 15, 550.
+
+Lu, J., Breitwieser, F. P., Thielen, P., & Salzberg, S. L. (2017). Bracken: Estimating species abundance in metagenomics data. PeerJ Computer Science, 3, e104.
+
+Lu, J., & Salzberg, S. L. (2020). Ultrafast and accurate 16S rRNA microbial community analysis using Kraken 2. Genome Biology, 21, 170.
+
+McMurdie, P. J., & Holmes, S. (2013). phyloseq: An R package for reproducible interactive analysis and graphics of microbiome census data. PLOS ONE, 8(4), e61217.
+
+Mosca, A., Leclerc, M., & Hugot, J.-P. (2016). Gut microbiota diversity and human diseases: Should we reintroduce key predators in our ecosystem? Frontiers in Microbiology, 7, 455.
+
+Oksanen, J., Blanchet, F. G., Friendly, M., Kindt, R., Legendre, P., McGlinn, D., ... Wagner, H. (2020). vegan: Community Ecology Package (Version 2.5-7) [R package]. https://CRAN.R-project.org/package=vegan
+
+Quince, C., Walker, A. W., Simpson, J. T., Loman, N. J., & Segata, N. (2017). Shotgun metagenomics, from sampling to analysis. Nature Biotechnology, 35(9), 833–844.
+
+Schloss, P. D., Westcott, S. L., Ryabin, T., Hall, J. R., Hartmann, M., Hollister, E. B., ... Weber, C. F. (2011). Assessing and improving methods used in operational taxonomic unit-based approaches for 16S rRNA gene sequence analysis. Applied and Environmental Microbiology, 77(10), 3219–3226.
+
+Sonnenburg, J. L., & Bäckhed, F. (2016). Diet–microbiota interactions as moderators of human metabolism. Nature, 535(7610), 56–64.
+
+Wood, D. E., Lu, J., & Langmead, B. (2019). Improved metagenomic analysis with Kraken 2. Genome Biology, 20, 257.
+
+Zinöcker, M. K., & Lindseth, I. A. (2018). The Western diet–microbiome–host interaction and its role in metabolic disease. Nutrients, 10(3), 365.
+
+Zmora, N., Zilberman-Schapira, G., Suez, J., Mor, U., Dori-Bachash, M., Bashiardes, S., ... Elinav, E. (2019). Personalized gut mucosal colonization resistance to empiric probiotics is associated with unique host and microbiome features. Cell, 174(6), 1388–1405.
