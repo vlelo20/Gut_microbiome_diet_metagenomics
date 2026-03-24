@@ -123,12 +123,12 @@ ggsave("figures/03_beta_diversity_PCoA.pdf", fig3, width = 8, height = 6)
 ggsave("figures/03_beta_diversity_PCoA.png", fig3, width = 8, height = 6, dpi = 300)
 cat("Figure 3 saved: 03_beta_diversity_PCoA.pdf + .png\n")
 
+metadata <- data.frame(sample_data(ps))
 dist_matrix <- phyloseq::distance(ps_rel, method = "bray")
-permanova <- adonis2(dist_matrix ~ diet, data = as.data.frame(sample_data(ps)))
-cat("\nPERMANOVA results:\n")
+diet_vector <- metadata$diet
+permanova <- adonis2(dist_matrix ~ diet_vector, permutations = 999)
 print(permanova)
-
-
+                                  
 # 8. DIFFERENTIAL ABUNDANCE (ANCOM-BC2)
 
 ancom_out <- ancombc2(
