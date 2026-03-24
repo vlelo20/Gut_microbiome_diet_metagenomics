@@ -9,13 +9,11 @@ Date created: March 20th, 2026, Last Updated: March 23rd, 2026
 
 # **1.0 Introduction**
 
-Diet is among the most tractable and potent modulators of gut microbiome composition. Unlike host genetics, which account for only 2–8% of microbiome variance in twin studies (Goodrich et al., 2014), diet can remodel microbial community structure within 24–72 hours by exerting direct selective pressure on which taxa can metabolize available substrates — those that can outcompete those that cannot, shifting the ecological balance of the entire community (David et al., 2014). Plant-based diets, rich in fermentable dietary fibre and polyphenols, consistently enrich fibre-degrading taxa such as Faecalibacterium prausnitzii, Roseburia intestinalis, and Bifidobacterium spp. — all associated with anti-inflammatory SCFA production and gut barrier reinforcement (Sonnenburg & Bäckhed, 2016; Dahl et al., 2023). In contrast, animal-based diets high in protein and saturated fat promote bile-tolerant, potentially pro-inflammatory taxa including Bilophila wadsworthia and Bacteroides spp., alongside reductions in SCFA-producing Firmicutes (David et al., 2014; Zinöcker & Lindseth, 2018). Because vegans and omnivores represent a naturally occurring, sustained dietary contrast rather than a controlled short-term intervention, they offer a particularly valuable window into how habitual diet shapes the microbiome over time. This project therefore investigates whether dietary pattern significantly influences gut microbiome composition at the species level, using publicly available shotgun metagenomic data from Fragiadakis et al. (2020), a dataset capturing microbiome variation across individuals with well-characterized, habitual dietary patterns.
+Diet is among the most tractable and potent modulators of gut microbiome composition, capable of remodelling microbial community structure within 24–72 hours by exerting direct selective pressure on which taxa can metabolize available substrates (David et al., 2014). Plant-based diets, rich in fermentable dietary fibre and polyphenols, consistently enrich fibre-degrading taxa such as Faecalibacterium prausnitzii, Roseburia intestinalis, and Bifidobacterium spp. — all associated with anti-inflammatory short-chain fatty acid (SCFA) production and gut barrier reinforcement (Sonnenburg & Bäckhed, 2016). In contrast, animal-based diets high in protein and saturated fat promote bile-tolerant, potentially pro-inflammatory taxa including Bilophila wadsworthia and Bacteroides spp., alongside reductions in SCFA-producing Firmicutes (David et al., 2014). Because vegans and omnivores represent a naturally occurring, sustained dietary contrast rather than a controlled short-term intervention, they offer a particularly valuable window into how habitual diet shapes the microbiome over time (Sonnenburg & Bäckhed, 2016). This project therefore investigates whether dietary pattern significantly influences gut microbiome composition at the species level, using publicly available shotgun metagenomic data from Fragiadakis et al. (2020), a dataset capturing microbiome variation across individuals with well-characterized, habitual dietary patterns.
 
-The choice of sequencing platform and analytical tools reflects deliberate consideration of their limitations and tradeoffs. Shotgun metagenomics was chosen over 16S rRNA amplicon sequencing because, while 16S metabarcoding is widely used and cost-effective, it targets only the hypervariable V3–V4 regions of the rRNA gene and is subject to amplification biases from primer mismatches, variable gene copy number across taxa, and PCR chimera formation — limiting resolution to the genus level in most cases (Schloss et al., 2011). This is a meaningful constraint when comparing dietary groups in which closely related species, such as Bacteroides thetaiotaomicron and Bacteroides fragilis, can have divergent metabolic roles and health associations. Shotgun metagenomics sequences all DNA in a sample in an untargeted manner, providing species- and strain-level resolution, access to functional gene content, and the ability to detect novel organisms without prior sequence knowledge — though at greater sequencing cost and computational demand, including the need for host read decontamination prior to classification (Quince et al., 2017; Durazzi et al., 2021).
+The choice of sequencing platform and analytical tools reflects deliberate consideration of their limitations and tradeoffs. Shotgun metagenomics was chosen over 16S rRNA amplicon sequencing because, while 16S metabarcoding is widely used and cost-effective, it targets only hypervariable regions of the rRNA gene and is subject to amplification biases from primer mismatches and variable gene copy number across taxa — limiting resolution to the genus level in most cases (Durazzi et al., 2021). This is a meaningful constraint when comparing dietary groups in which closely related species, such as Bacteroides thetaiotaomicron and Bacteroides fragilis, can have divergent metabolic roles and health associations. Shotgun metagenomics sequences all DNA in a sample in an untargeted manner, providing species- and strain-level resolution and access to functional gene content — though at greater sequencing cost and computational demand, including the need for host read decontamination prior to classification (Durazzi et al., 2021). Raw reads were quality-controlled using fastp v0.24.0, with adapter auto-detection, polyG trimming, and reads below 50 bp discarded. Taxonomic classification was performed with Kraken2 v2.1.6 (Wood et al., 2019) against the Standard-8 database (February 2026), which includes RefSeq bacterial, archaeal, viral, plasmid, human, and UniVec_Core sequences. While Kraken2 is orders of magnitude faster than alignment-based tools such as BLAST, k-mer methods are prone to false-positive classifications at default settings, which was mitigated by applying a confidence threshold of 0.15 above the default of 0 (Wood et al., 2019). Bracken v3.0 (Lu et al., 2017) was applied downstream to correct a systematic bias whereby longer genomes capture disproportionately more reads; Bracken redistributes read counts probabilistically and normalizes for genome size, producing more accurate species-level estimates.
 
-Raw reads were quality-controlled using fastp v0.24.0 (Chen et al., 2018), selected over Trimmomatic for its integrated adapter auto-detection, polyG trimming, and quality filtering in a single pass, with reads below 50 bp discarded. Taxonomic classification was then performed with Kraken2 v2.1.6 (Wood et al., 2019) against the Standard-8 database (February 2026), which includes RefSeq bacterial, archaeal, viral, plasmid, human, and UniVec_Core sequences. While Kraken2 is orders of magnitude faster than alignment-based tools such as BLAST, k-mer methods are prone to false-positive classifications at default settings — particularly for taxa underrepresented in the reference database — which was mitigated by applying a confidence threshold of 0.15 above the default of 0 (Lu & Salzberg, 2020). Bracken v3.0 (Lu et al., 2017) was applied downstream to correct a systematic bias in raw Kraken2 output whereby longer genomes capture disproportionately more reads, inflating their apparent abundance; Bracken redistributes read counts probabilistically and normalizes for genome size, producing more accurate species-level estimates.
-
-Diversity analysis was conducted in R using phyloseq (McMurdie & Holmes, 2013) and vegan (Oksanen et al., 2020). Three complementary alpha diversity metrics were calculated: observed species richness, which counts detected species without weighting; the Shannon index, which accounts for both richness and evenness and is sensitive to community-wide changes; and the Simpson index, which is dominance-weighted and more robust to rare species — together capturing aspects of within-sample diversity that no single metric reflects alone. Beta diversity was assessed using Bray-Curtis dissimilarity on relative abundances, visualized by PCoA, and tested with PERMANOVA (adonis2) to determine whether community composition differed significantly between dietary groups. Rarefaction curves were generated using vegan::rarecurve() to confirm adequate sequencing depth prior to analysis. Differential abundance was assessed using ANCOM-BC2 (Lin & Peddada, 2022), chosen over DESeq2 because microbiome sequencing yields inherently compositional data — a genuine increase in one taxon mathematically suppresses the relative abundance of others, violating the assumptions of DESeq2's negative binomial model, which was designed for RNA-seq (Gloor et al., 2017; Hawinkel et al., 2019). ANCOM-BC2 corrects for this via log-ratio transformations and explicitly accounts for unequal sampling fractions. Given the small sample size (n=3 per group), no taxa reached FDR < 0.05; the top 20 taxa ranked by p-value are therefore presented as exploratory findings. Interactive taxonomic visualizations were generated with KronaTools v2.8.1 (Ondov et al., 2011), providing a hierarchical, sample-level overview of community composition that complements the quantitative analyses.
+Diversity analysis was conducted in R using phyloseq (McMurdie & Holmes, 2013) and vegan (Oksanen et al., 2020). Three complementary alpha diversity metrics were calculated: observed species richness, which counts detected species without weighting; the Shannon index, which accounts for both richness and evenness; and the Simpson index, which is dominance-weighted and more robust to rare species — together capturing aspects of within-sample diversity that no single metric reflects alone. Beta diversity was assessed using Bray-Curtis dissimilarity on relative abundances, visualized by PCoA, and tested with PERMANOVA (adonis2) to determine whether community composition differed significantly between dietary groups. Differential abundance was assessed using ANCOM-BC2 (Lin & Peddada, 2022), chosen over DESeq2 because microbiome sequencing yields inherently compositional data — a genuine increase in one taxon mathematically suppresses the relative abundance of others, violating the assumptions of DESeq2's negative binomial model, which was designed for RNA-seq (Gloor et al., 2017). ANCOM-BC2 corrects for this via log-ratio transformations and explicitly accounts for unequal sampling fractions. Given the small sample size (n=3 per group), no taxa reached FDR < 0.05; the top 20 taxa ranked by p-value are therefore presented as exploratory findings. Interactive taxonomic visualizations were generated with KronaTools v2.8.1, providing a hierarchical overview of community composition that complements the quantitative analyses.
 
 ---
 
@@ -31,9 +29,6 @@ module load kraken2/2.1.6
 module load bracken/3.0
 module load kronatools/2.8.1
 ```
-
-### **2.1.1 Directory Structure**
-
 ## **2.2 Data & Metadata**
 
 ### **2.2.1 Data Source**
@@ -78,7 +73,7 @@ tar -xzf k2_standard_08_GB_20260226.tar.gz -C kraken_db/
 
 ### **2.3.1 fastp**
 
-Quality control and adapter trimming were performed using `fastp/0.24.0`. Adapters were auto-detected for paired-end data, polyG tails were trimmed, and reads shorter than 50 bp were discarded. Each sample produced an HTML and JSON report.
+Quality control and adapter trimming were performed using fastp v0.24.0 (Chen et al., 2018). fastp was selected for its ability to perform adapter auto-detection, quality filtering, and length trimming in a single pass without requiring a separate adapter sequence file — an advantage over tools such as Trimmomatic, which requires manual adapter specification. For paired-end data, adapters were auto-detected using --detect_adapter_for_pe, polyG tails were trimmed using --trim_poly_g to remove sequencing artefacts common in Illumina two-colour chemistry platforms, and reads shorter than 50 bp were discarded using --length_required 50 to ensure sufficient read length for accurate k-mer classification downstream. Each sample produced an HTML and JSON quality report confirming adapter removal and read length distributions before and after filtering.
 
 ```bash
 fastp --in1 data/${SRR}_1.fastq.gz --in2 data/${SRR}_2.fastq.gz \
@@ -91,7 +86,7 @@ fastp --in1 data/${SRR}_1.fastq.gz --in2 data/${SRR}_2.fastq.gz \
 ## **2.4 Taxonomic Classification**
 ### **2.4.1 Kraken2**
 
-Taxonomic classification was performed using `kraken2/2.1.6` with the Standard-8 database. A confidence threshold of 0.15 was applied to reduce false positives. The database was loaded into RAM (200 GB allocated) for faster processing. Raw `.kraken` output files were deleted after each sample to conserve storage.
+Taxonomic classification was performed using Kraken2 v2.1.6 (Wood et al., 2019) with the Standard-8 database (February 2026), which contains RefSeq bacterial, archaeal, viral, plasmid, human, and UniVec_Core sequences capped at 8 GB for memory efficiency. Kraken2 operates by querying reads against a pre-built database of k-mer-to-lowest-common-ancestor (LCA) mappings, assigning each read to the most specific taxon supported by its k-mer content. A confidence threshold of 0.15 was applied above the default of 0, requiring that a minimum fraction of k-mers mapping across a clade support the assigned classification — this substantially reduces false-positive assignments for taxa underrepresented in the reference database, at a modest cost to recall (Wood et al., 2019). The database was loaded entirely into RAM (200 GB allocated) to avoid repeated disk I/O during classification, which would otherwise represent the primary runtime bottleneck at this scale. Only .report files were retained after each sample; raw .kraken output files were deleted immediately to conserve storage, as the report format contains all information required for downstream Bracken re-estimation and Krona visualization.
 
 ```bash
 kraken2 --db $DB --confidence 0.15 --threads 32 \
@@ -100,7 +95,7 @@ kraken2 --db $DB --confidence 0.15 --threads 32 \
 ```
 
 ### **2.4.2 Bracken**
-Bracken (`bracken/3.0`) re-estimated species-level abundances from Kraken2 reports by redistributing genus-level reads and normalizing for genome size. Read length was set to 150 bp to match confirmed sequencing length. All six `.bracken` output files were combined into a single abundance matrix using `combine_bracken_outputs.py`.
+Species-level abundance estimation was performed using Bracken v3.0 (Lu et al., 2017). Raw Kraken2 output is taxonomically diffuse and genome-size biased — reads are distributed across all taxonomic nodes rather than resolved to species, and longer genomes capture disproportionately more reads regardless of true abundance. Bracken corrects for this by applying a Bayesian model trained on the same reference database to redistribute and normalize read counts at species level. Read length was set to -r 150 to match the confirmed 150 bp sequencing length, -l S specified species-level redistribution, and -t 10 excluded classifications supported by fewer than 10 reads. All six .bracken output files were then combined into a single abundance matrix using combine_bracken_outputs.py for downstream analysis.
 
 ```bash
 bracken -d $DB -i kraken_output/${SRR}.report \
@@ -108,41 +103,41 @@ bracken -d $DB -i kraken_output/${SRR}.report \
 ```
 ### **2.4.3 Krona Visualization**
 
-Interactive taxonomic sunburst plots were generated using `kronatools/2.8.1` and `kreport2krona.py` (KrakenTools). All six samples were combined into a single interactive HTML file (`krona_output/all_samples_krona.html`).
+Interactive taxonomic visualizations were generated using KronaTools v2.8.1 (Ondov et al., 2011). Kraken2 reports were first converted to Krona-compatible format using kreport2krona.py from KrakenTools, and all six samples were combined into a single interactive HTML file (krona_output/all_samples_krona.html). KronaTools produces hierarchical sunburst plots that allow interactive exploration of community composition across all taxonomic ranks simultaneously, providing an intuitive complement to the quantitative diversity analyses for identifying dominant taxa and gross compositional differences between samples.
 
 ## **2.5 Diversity Analysis**
 
-All diversity analyses were performed in R using `phyloseq`, `vegan`, `ggplot2`, and `ANCOMBC`. The combined Bracken abundance matrix was imported and only read count columns were used (fraction columns excluded).
+All diversity analyses were performed in R using phyloseq, vegan, ggplot2, and ANCOMBC. The combined Bracken abundance matrix was imported and only read count columns were used (fraction columns excluded), as phyloseq requires integer count data for diversity calculations and downstream compositional analysis.
 
 ### **2.5.1 Alpha Diversity**
-Observed species richness, Shannon index, and Simpson index were calculated using `plot_richness()` in phyloseq and compared between diet groups.
+Observed species richness, Shannon index, and Simpson index were calculated using plot_richness() in phyloseq and compared between diet groups. Observed richness counts the total number of detected species without any weighting, providing a simple measure of community size. The Shannon index accounts for both richness and evenness, giving a more complete picture of diversity by penalizing communities dominated by few taxa. The Simpson index is dominance-weighted and less sensitive to rare species, making it more robust in datasets where low-abundance taxa may reflect sequencing noise rather than true biological diversity. Together, these three metrics capture complementary aspects of within-sample diversity that no single index reflects alone.
 
 ### **2.5.2 Beta Diversity**
-Bray-Curtis dissimilarity was calculated on relative abundance data and visualized using PCoA ordination (`ordinate()`, method = "PCoA"). A PERMANOVA test (`adonis2`) was performed to assess statistical significance of group separation.
+Bray-Curtis dissimilarity was calculated on relative abundance data and visualized using PCoA ordination (ordinate(), method = "PCoA"). Bray-Curtis was selected because it accounts for both the presence and relative abundance of shared species between samples, making it more informative than presence-absence metrics for compositional comparisons. A PERMANOVA test (adonis2) was performed to assess whether the observed separation between dietary groups was statistically significant, as PCoA ordination alone is visual and does not provide a formal test of group differences. PERMANOVA is appropriate here because it makes no assumptions about the underlying distribution of the data, unlike parametric alternatives.
 
 ### **2.5.3 Differential Abundance**
-Differential abundance was assessed using **ANCOM-BC2** (`ANCOMBC` R package), which corrects for compositional bias and unequal sampling fractions. Due to the small sample size (n=3 per group), no taxa reached FDR < 0.05. The top 20 taxa ranked by p-value are presented as exploratory results. Rarefaction curves were generated using `vegan::rarecurve()` to confirm sufficient sequencing depth.
+Differential abundance was assessed using ANCOM-BC2 (ANCOMBC R package; Lin & Peddada, 2022), which corrects for compositional bias and unequal sampling fractions via log-ratio transformations — making it more appropriate for microbiome count data than RNA-seq-derived methods such as DESeq2, which assumes a negative binomial distribution that compositional data violates (Gloor et al., 2017). Due to the small sample size (n=3 per group), statistical power was limited and no taxa reached FDR < 0.05; the top 20 taxa ranked by p-value are therefore presented as exploratory results reflecting directional trends rather than confirmed differential abundance. Rarefaction curves were generated using vegan::rarecurve() prior to analysis to confirm that sequencing depth was sufficient across all samples and that observed species counts had reached a plateau, ensuring that diversity comparisons were not confounded by unequal sampling effort.
 
 ---
 
 # **3.0 Results**
 
 ## **3.1 Quality Control Summary**
-All six samples passed quality control with `fastp/0.24.0`. Minimal read loss was observed after trimming across all samples, indicating high raw read quality. Read lengths were confirmed at 150 bp, consistent with the sequencing parameters reported in Fragiadakis et al. (2020). Rarefaction curves for all samples plateaued well before their maximum sequencing depth (Figure 5), confirming that sequencing depth was sufficient to capture the majority of detectable species diversity in each sample.
+All six samples passed quality control with fastp v0.24.0 (Chen et al., 2018). Raw read counts ranged from 55.5 million (SRR8146944, vegan) to 94.7 million (SRR8146951, vegan) reads per sample. Read retention was high across all samples, with 95.3–98.1% of reads passing filters — read loss was minimal and primarily attributable to low quality rather than length filtering, with fewer than 0.05% of reads discarded for being under 50 bp. Illumina TruSeq adapters were auto-detected and trimmed in all samples, and pre-filtering Q30 scores ranged from 78.1–93.9%, improving after filtering. Duplication rates were low (0.32–0.55%), suggesting minimal PCR amplification bias. Rarefaction curves for all samples plateaued well before maximum sequencing depth (Figure 5), confirming sufficient depth to capture the majority of detectable species diversity.
 
 ## **3.2 Taxonomic Abundance**
 <img width="600" height="800" alt="01_taxonomic_abundance" src="https://github.com/user-attachments/assets/f4576c16-52ee-4ffb-966e-aac6662917c0" />
 
 **Figure 1.** Relative abundance of the top 20 most abundant species across vegan and omnivore samples. Each bar represents one sample, with colours indicating species identity.
 
-Taxonomic classification with Kraken2 and Bracken identified 223 species across all six samples. The top 20 most abundant taxa differed visibly between diet groups (Figure 1). Vegan samples showed higher relative abundance of *Blautia wexlerae*, *Bifidobacterium* spp., *Faecalibacterium prausnitzii*, and *Roseburia* spp., while omnivore samples were enriched in *Alistipes* spp., *Phocaeicola vulgatus*, and *Bilophila wadsworthia*. Considerable within-group variability was observed, particularly among vegan samples, with one sample (SRR8146944) showing a distinct composition compared to the other two vegans.
+Taxonomic classification with Kraken2 and Bracken identified 223 species across all six samples. The top 20 most abundant taxa differed visibly between diet groups (Figure 1). Vegan samples were consistently enriched in Blautia wexlerae, Faecalibacterium prausnitzii, Bifidobacterium adolescentis, Bifidobacterium longum, Roseburia faecis, and Anaerostipes hadrus — all obligate anaerobes associated with dietary fibre fermentation and SCFA production. Omnivore samples showed higher relative abundance of Alistipes onderdonkii, Alistipes putredinis, Phocaeicola vulgatus, and Bacteroides stercoris, taxa typically associated with protein and fat metabolism. Both groups shared a background of Faecalibacterium spp. and Phascolarctobacterium succinatutens, suggesting some core community members are present regardless of dietary pattern. Considerable within-group variability was observed — omnivore sample SRR8146935 was dominated by Blautia wexlerae and Phocaeicola vulgatus, while SRR8146936 showed an unusually high proportion of Roseburia faecis relative to the other omnivores. Among vegans, SRR8146944 showed a notably distinct composition with lower overall species evenness compared to SRR8146951 and SRR8146952, which were more compositionally similar to each other.
 
 ## **3.3 Alpha Diversity**
 <img width="600" height="800" alt="02_alpha_diversity" src="https://github.com/user-attachments/assets/bcd171e6-7d4a-4885-b03e-f3198c4741a4" />
 
-**Figure 2.** Alpha diversity measures (Observed species richness, Shannon index, Simpson index) compared between vegan and omnivore diet groups. Points represent individual samples; boxes show interquartile range.
+Figure 2. Alpha diversity measures (Observed species richness, Shannon index, Simpson index) compared between vegan and omnivore diet groups. Points represent individual samples; boxes show interquartile range.
 
-Alpha diversity measures showed overlapping distributions between diet groups, with omnivores tending toward higher median Shannon and Simpson indices than vegans (Figure 2). However, high within-group variability — particularly in the vegan group — means these differences should be interpreted with caution given the small sample size (n=3 per group). Observed species richness was similarly variable, with vegans spanning a wider range than omnivores.
+Alpha diversity measures showed overlapping but directionally distinct distributions between diet groups (Figure 2). Observed species richness was higher in vegans (median ~120 species) compared to omnivores (median ~105 species), though the vegan group spanned a considerably wider range (~79–140 species) compared to omnivores (~70–118 species), driven largely by one vegan outlier (SRR8146944) with notably lower richness consistent with its distinct composition observed in Figure 1. The Shannon index, which accounts for both richness and evenness, showed the opposite trend — omnivores had a higher median Shannon value (~3.1) compared to vegans (~2.5), suggesting that while vegans may detect more species overall, community abundance is more evenly distributed across species in omnivore samples. The Simpson index reinforced this pattern, with omnivores showing higher median dominance-corrected diversity (~0.93) than vegans (~0.79), and the vegan group again showing greater spread with one sample falling as low as ~0.63. Together these metrics suggest that omnivore samples tend toward more even communities while vegan samples, though potentially richer in total species, are more variable and in some cases dominated by fewer highly abundant taxa. All differences should be interpreted cautiously given the small sample size (n=3 per group) and the considerable within-group variability observed across all three metrics.
 
 ## **3.4 Beta Diversity**
 <img width="600" height="800" alt="03_beta_diversity_PCoA" src="https://github.com/user-attachments/assets/70ed98a4-c547-460a-b575-b80c8e3feea5" />
@@ -176,6 +171,7 @@ In contrast, the enrichment of *Bilophila wadsworthia* in omnivores is consisten
 
 The absence of statistically significant differential abundance results (FDR < 0.05) is most plausibly explained by insufficient statistical power at n=3 per group, rather than a true absence of biological signal. The directional consistency of fold changes with the published literature supports the biological relevance of the observed trends.
 
+Interactive taxonomic composition across all six samples was visualized using KronaTools v2.8.1 and is available as a supplementary HTML file (krona_output/all_samples_krona.html), providing a hierarchical overview of community composition at each taxonomic rank.
 ## ** Limitations**
 The primary limitation of this analysis is the small sample size (n=3 per group), which severely restricts the statistical power of both beta diversity tests and differential abundance analysis. Future studies should include at least 10–20 samples per group to achieve adequate power with compositional methods such as ANCOM-BC2. Additionally, the Kraken2 Standard-8 database is a memory-reduced version of the full Standard database, which may reduce sensitivity for rare or poorly represented taxa. Individual confounders including age, geographic origin, antibiotic history, and body mass index were not accounted for in this analysis, which may contribute to the within-group variability observed across all diversity measures.
 
@@ -185,48 +181,18 @@ Overall, these results support the hypothesis that long‑term vegan and omnivor
 
 # **5.0 References**
 
-Baxter, N. T., Schmidt, A. W., Venkataraman, A., Kim, K. S., Waldron, C., & Schmidt, T. M. (2019). Dynamics of human gut microbiota and short-chain fatty acids in response to dietary interventions with three fermentable fibers. mBio, 10(1), e02566-18.
-
-Cryan, J. F., O’Riordan, K. J., Cowan, C. S. M., Sandhu, K. V., Bastiaanssen, T. F. S., Boehme, M., ... Dinan, T. G. (2019). The microbiota–gut–brain axis. Physiological Reviews, 99(4), 1877–2013.
-
-Dahl, W. J., Rivero Mendoza, D., & Lambert, J. M. (2023). Diet, nutrients and the microbiome. Progress in Molecular Biology and Translational Science, 171, 237–263.
-
-David, L. A., Maurice, C. F., Carmody, R. N., Gootenberg, D. B., Button, J. E., Wolfe, B. E., ... Turnbaugh, P. J. (2014). Diet rapidly and reproducibly alters the human gut microbiome. Nature, 505(7484), 559–563.
-
-Durazzi, F., Sala, C., Castellani, G., Manfreda, G., Remondini, D., & Castellani, G. (2021). Comparison between 16S rRNA and shotgun sequencing data for the taxonomic characterization of the gut microbiota. Scientific Reports, 11, 3030.
-
-Fragiadakis, G. K., Smits, S. A., Sonnenburg, E. D., Van Treuren, W., Reid, G., Knight, R., ... Sonnenburg, J. L. (2020). Links between environment, diet, and the hunter-gatherer microbiome. Cell Host & Microbe, 27(3), 380–391.
-
-Gloor, G. B., Macklaim, J. M., Pawlowsky-Glahn, V., & Egozcue, J. J. (2017). Microbiome datasets are compositional: and this is not optional. Frontiers in Microbiology, 8, 2224.
-
-Goodrich, J. K., Waters, J. L., Poole, A. C., Sutter, J. L., Koren, O., Blekhman, R., ... Ley, R. E. (2014). Human genetics shape the gut microbiome. Cell, 159(4), 789–799.
-
-Grice, E. A., & Segre, J. A. (2012). The human microbiome: Our second genome. Annual Review of Genomics and Human Genetics, 13, 151–170.
-
-Hawinkel, S., Mattiello, F., Bijnens, L., & Thas, O. (2019). A broken promise: Microbiome differential abundance methods do not control the false discovery rate. Briefings in Bioinformatics, 20(1), 210–221.
-
-Lin, H., & Peddada, S. D. (2020). Analysis of compositions of microbiomes with bias correction. Nature Communications, 11, 3514.
-
-Love, M. I., Huber, W., & Anders, S. (2014). Moderated estimation of fold change and dispersion for RNA-seq data with DESeq2. Genome Biology, 15, 550.
-
-Lu, J., Breitwieser, F. P., Thielen, P., & Salzberg, S. L. (2017). Bracken: Estimating species abundance in metagenomics data. PeerJ Computer Science, 3, e104.
-
-Lu, J., & Salzberg, S. L. (2020). Ultrafast and accurate 16S rRNA microbial community analysis using Kraken 2. Genome Biology, 21, 170.
-
-McMurdie, P. J., & Holmes, S. (2013). phyloseq: An R package for reproducible interactive analysis and graphics of microbiome census data. PLOS ONE, 8(4), e61217.
-
-Mosca, A., Leclerc, M., & Hugot, J.-P. (2016). Gut microbiota diversity and human diseases: Should we reintroduce key predators in our ecosystem? Frontiers in Microbiology, 7, 455.
-
-Oksanen, J., Blanchet, F. G., Friendly, M., Kindt, R., Legendre, P., McGlinn, D., ... Wagner, H. (2020). vegan: Community Ecology Package (Version 2.5-7) [R package]. https://CRAN.R-project.org/package=vegan
-
-Quince, C., Walker, A. W., Simpson, J. T., Loman, N. J., & Segata, N. (2017). Shotgun metagenomics, from sampling to analysis. Nature Biotechnology, 35(9), 833–844.
-
-Schloss, P. D., Westcott, S. L., Ryabin, T., Hall, J. R., Hartmann, M., Hollister, E. B., ... Weber, C. F. (2011). Assessing and improving methods used in operational taxonomic unit-based approaches for 16S rRNA gene sequence analysis. Applied and Environmental Microbiology, 77(10), 3219–3226.
-
-Sonnenburg, J. L., & Bäckhed, F. (2016). Diet–microbiota interactions as moderators of human metabolism. Nature, 535(7610), 56–64.
-
-Wood, D. E., Lu, J., & Langmead, B. (2019). Improved metagenomic analysis with Kraken 2. Genome Biology, 20, 257.
-
-Zinöcker, M. K., & Lindseth, I. A. (2018). The Western diet–microbiome–host interaction and its role in metabolic disease. Nutrients, 10(3), 365.
-
-Zmora, N., Zilberman-Schapira, G., Suez, J., Mor, U., Dori-Bachash, M., Bashiardes, S., ... Elinav, E. (2019). Personalized gut mucosal colonization resistance to empiric probiotics is associated with unique host and microbiome features. Cell, 174(6), 1388–1405.
+Baxter, N.T., et al. (2019). Dynamics of human gut microbiota and short-chain fatty acids in response to dietary interventions with three fermentable fibers. mBio, 10(1), e02566-18.
+David, L.A., et al. (2014). Diet rapidly and reproducibly alters the human gut microbiome. Nature, 505(7484), 559–563.
+Durazzi, F., et al. (2021). Comparison between 16S rRNA and shotgun sequencing data for the taxonomic characterization of the gut microbiota. Scientific Reports, 11, 3030.
+Fragiadakis, G.K., et al. (2020). Links between environment, diet, and the hunter-gatherer microbiome. Cell Host & Microbe, 27(3), 380–391.
+Gloor, G.B., et al. (2017). Microbiome datasets are compositional: and this is not optional. Frontiers in Microbiology, 8, 2224.
+Grice, E.A. & Segre, J.A. (2012). The human microbiome: our second genome. Annual Review of Genomics and Human Genetics, 13, 151–170.
+Lin, H. & Peddada, S.D. (2022). Analysis of compositions of microbiomes with bias correction 2 (ANCOM-BC2). Nature Communications, 13, 3737.
+Lu, J., et al. (2017). Bracken: estimating species abundance in metagenomics data. PeerJ Computer Science, 3, e104.
+McMurdie, P.J. & Holmes, S. (2013). phyloseq: an R package for reproducible interactive analysis and graphics of microbiome census data. PLOS ONE, 8(4), e61217.
+Mosca, A., et al. (2016). Gut microbiota diversity and human diseases: should we reintroduce key predators in our ecosystem? Frontiers in Microbiology, 7, 455.
+Oksanen, J., et al. (2020). vegan: Community Ecology Package. R package version 2.5-7.
+Ondov, B.D., et al. (2011). Interactive metagenomic visualization in a Web browser. BMC Bioinformatics, 12, 385.
+Sonnenburg, J.L. & Bäckhed, F. (2016). Diet–microbiota interactions as moderators of human metabolism. Nature, 535(7610), 56–64.
+Wood, D.E., et al. (2019). Improved metagenomic analysis with Kraken 2. Genome Biology, 20, 257.
+Zmora, N., et al. (2019). Personalized gut mucosal colonization resistance to empiric probiotics is associated with unique host and microbiome features. Cell, 174(6), 1388–1405.
