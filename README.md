@@ -165,6 +165,9 @@ Rarefaction analysis confirmed that sequencing depth was sufficient across all s
 ## **3.7 Krona Taxonomic Visualization**
 The Krona visualization revealed that classified reads represented only 0.64–1.33% of total reads across all six samples, with 98.7–99.4% of reads remaining unclassified following Kraken2 classification. Despite this low overall classification rate, the classified fraction was consistent across samples and was used for all downstream diversity and differential abundance analyses, representing relative community composition within the classified subset rather than absolute community coverage.
 
+Interactive Krona plot [View the live Krona visualization](https://vlelo20.github.io/Gut_microbiome_diet_metagenomics/)
+
+
 ---
 
 # **4.0 Discussion**
